@@ -1,10 +1,7 @@
-import React from "react";
-import { Button, Checkbox, Form, Input } from "antd";
-import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
-
-const onFinish = (values) => {
-  console.log("Success:", values);
-};
+import React, { useEffect } from "react";
+import { Button, Form, Input } from "antd";
+import { useHistory } from "react-router-dom";
+import { useAuth } from "../contexts/auth";
 
 const onFinishFailed = (errorInfo) => {
   console.log("Failed:", errorInfo);
@@ -12,24 +9,34 @@ const onFinishFailed = (errorInfo) => {
 
 const LoginForm = () => {
   const history = useHistory();
-  const account = { username: "admin", password: "admin" };
-  const onFinish = (value) => {
-    console.log(value);
-    if (JSON.stringify(value) === JSON.stringify(account)) {
-      console.log(value);
+  const { isLogin } = useAuth();
+  useEffect(() => {
+    if (isLogin()) {
+      console.log(isLogin());
       history.push("/");
+    }
+  }, []);
+  const onFinish = (value) => {
+    if (value.username === "admin" && value.password === "admin") {
+      localStorage.setItem(
+        "token",
+        btoa(`${value.username}+${value.password}`)
+      );
+      history.push("/");
+    } else {
+      alert("Nhập sai thông tin");
     }
   };
   return (
     <div className="layout">
       <div className="container">
         <div className="containerHeader"></div>
-        <div className="header">Change Academy</div>
+        <div className="headerLogin">Change Academy</div>
         <Form
           name="basic"
           labelCol={{ span: 8 }}
           wrapperCol={{ span: 16 }}
-          style={{ maxWidth: 600 }}
+          style={{ maxWidth: 600, marginTop: 16 }}
           initialValues={{ remember: true }}
           onFinish={onFinish}
           onFinishFailed={onFinishFailed}
@@ -52,8 +59,12 @@ const LoginForm = () => {
           </Form.Item>
 
           <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-            <Button type="primary" htmlType="submit">
-              Submit
+            <Button
+              type="primary"
+              htmlType="submit"
+              style={{ backgroundColor: "#be3455" }}
+            >
+              Đăng nhập
             </Button>
           </Form.Item>
         </Form>

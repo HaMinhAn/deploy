@@ -1,19 +1,14 @@
-import logo from "./logo.svg";
 import "./App.css";
-
-import { ColorScheme } from "./pages/Color";
-import LoginForm from "./components/Login";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { AuthProvider } from "./contexts/auth";
+import { Browser } from "./route/browser";
+import { BrowserRouter } from "react-router-dom";
 function App() {
   return (
-    <Router>
-      <Switch>
-        {/* <Route exact path="/" component={Layout} /> */}
-        <Route exact path="/login" component={LoginForm} />
-
-        <Route path="/" component={ColorScheme} />
-      </Switch>
-    </Router>
+    <BrowserRouter>
+      <AuthProvider>
+        <Browser />
+      </AuthProvider>
+    </BrowserRouter>
   );
 }
 

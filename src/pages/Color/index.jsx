@@ -3,6 +3,8 @@ import React, { useState, useEffect } from "react";
 import * as XLSX from "xlsx/xlsx.mjs";
 import "./style.css";
 import { ReloadOutlined } from "@ant-design/icons";
+import { useAuth } from "../../contexts/auth";
+import { useHistory } from "react-router-dom";
 const layout = {
   labelCol: {
     span: 8,
@@ -27,7 +29,9 @@ export const ColorScheme = () => {
   const [afterLip, setAfterLip] = useState("");
   const [form] = Form.useForm();
   const formRef = React.useRef(null);
+  const { isLogin } = useAuth();
   const fileUrl = "./mau.xlsx";
+  const history = useHistory();
   let hasFetch = false;
   const onRootSelect = (value, key) => {
     setRootLip(key.value);
@@ -55,6 +59,10 @@ export const ColorScheme = () => {
     console.log("search:", value, key);
   };
   useEffect(() => {
+    if (!isLogin()) {
+      console.log(isLogin());
+      history.push("/login");
+    }
     if (!hasFetch) {
       hasFetch = true;
       fetch(fileUrl)
@@ -131,21 +139,13 @@ export const ColorScheme = () => {
   // console.log(datas[0]);
   // datas.forEach((row, index) => console.log(index));
   // }, []);
-  const onFinish = () => {
-    const resultTemp = datas.find(
-      (data) => data.after === afterLip && data.root === rootLip
-    );
-    if (resultTemp) {
-      console.log(resultTemp.value);
-      setResult({ key: resultTemp.value, value: resultTemp.label });
-    }
-  };
+
   console.log(afterLip);
   return (
     <div className="layout">
       <div className="container">
         <div className="containerHeader"></div>
-        <div className="header">Change Academy</div>
+        <div className="header">Mix Smart Color</div>
         <Form
           className="form"
           form={form}
@@ -156,8 +156,20 @@ export const ColorScheme = () => {
             maxWidth: 1000,
           }}
         >
-          <Form.Item {...tailLayout}>
-            <Button type="primary" htmlType="reset">
+          <Form.Item
+            {...tailLayout}
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              marginTop: 10,
+              width: 400,
+            }}
+          >
+            <Button
+              style={{ backgroundColor: "#be3455", color: "white" }}
+              type="default"
+              htmlType="reset"
+            >
               <ReloadOutlined />
             </Button>
           </Form.Item>
@@ -221,7 +233,7 @@ export const ColorScheme = () => {
                   {result.label}
                 </div>
               ) : (
-                <div className="result">Hiện không có màu này</div>
+                <div className="result"></div>
               )}
             </Form.Item>
             <Form.Item {...tailLayout}></Form.Item>

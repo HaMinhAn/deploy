@@ -42,12 +42,24 @@
   flex-direction: column;
   display: flex;
   align-items: center;
+  width: 100%;
   justify-content: center;
   font-weight: 800;
   font-size: 46px;
   animation: pop-in 1s ease-in;
 }
-
+.headerLogin {
+  height: 30%;
+  flex-direction: column;
+  display: flex;
+  /* background-color: #be3455; */
+  align-items: center;
+  width: 100%;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 46px;
+  animation: pop-in 1s ease-in;
+}
 .container {
   border: 1px solid black;
   width: 500px;
