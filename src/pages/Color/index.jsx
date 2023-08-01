@@ -19,14 +19,42 @@ const tailLayout = {
     span: 16,
   },
 };
-
+const editOptionValue = (options) => {
+  const editedOptions = [];
+  options.forEach((option, key) => {
+    console.log(option);
+    const newOption = {
+      key: key,
+      value: option.value,
+      label: (
+        <>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            {option.label}
+            <div
+              style={{ backgroundColor: option.value, width: 30, height: 30 }}
+            ></div>
+          </div>
+        </>
+      ),
+    };
+    editedOptions.push(newOption);
+  });
+  return editedOptions;
+};
 export const ColorScheme = () => {
   const [datas, setDatas] = useState([]);
   const [rootLips, setRootLips] = useState([]);
   const [afterLips, setAfterLips] = useState([]);
   const [result, setResult] = useState();
-  const [rootLip, setRootLip] = useState("");
-  const [afterLip, setAfterLip] = useState("");
+  const [rootLip, setRootLip] = useState();
+  const [afterLip, setAfterLip] = useState();
   const [form] = Form.useForm();
   const formRef = React.useRef(null);
   const { isLogin } = useAuth();
@@ -48,12 +76,8 @@ export const ColorScheme = () => {
   const onAfterSelect = (value, key) => {
     setAfterLip(value);
     const result2 = datas.find((obj) => obj.root.value === rootLip);
-    console.log(result2);
     const result3 = result2.mix.find((obj) => obj.after.value === key.value);
-    console.log(result3);
     setResult(result3.result);
-    console.log(`selected ${value} `);
-    console.log(key);
   };
   const onSearch = (value, key) => {
     console.log("search:", value, key);
@@ -135,17 +159,13 @@ export const ColorScheme = () => {
     setResult();
     form.resetFields();
   }
-  // useEffect(() => {
-  // console.log(datas[0]);
-  // datas.forEach((row, index) => console.log(index));
-  // }, []);
 
   console.log(afterLip);
   return (
     <div className="layout">
       <div className="container">
         <div className="containerHeader"></div>
-        <div className="header">Mix Smart Color</div>
+        <div className="header">Change Smart Color</div>
         <Form
           className="form"
           form={form}
@@ -154,12 +174,11 @@ export const ColorScheme = () => {
           onReset={handleReset}
         >
           <Form.Item
-            {...tailLayout}
             style={{
               display: "flex",
               justifyContent: "center",
               marginTop: 10,
-              width: 400,
+              width: "100%",
             }}
           >
             <Button
@@ -167,10 +186,14 @@ export const ColorScheme = () => {
               type="default"
               htmlType="reset"
             >
-              <ReloadOutlined />
+              Refresh
             </Button>
           </Form.Item>
-          <Form.Item name="root" label="Màu môi gốc">
+          <Form.Item
+            name="root"
+            label="Màu môi gốc"
+            style={{ fontWeight: 700 }}
+          >
             <Select
               showSearch
               placeholder="Chọn màu môi gốc"
@@ -184,7 +207,7 @@ export const ColorScheme = () => {
               }
               style={{ marginBottom: 10 }}
               disabled={result}
-              options={rootLips}
+              options={editOptionValue(rootLips)}
             />
             <div
               className="sample"
@@ -194,10 +217,14 @@ export const ColorScheme = () => {
               }}
             ></div>
           </Form.Item>
-          <Form.Item name="after" label="Màu môi sau bong">
+          <Form.Item
+            name="after"
+            label="Màu môi sau bong"
+            style={{ fontWeight: 700 }}
+          >
             <Select
               showSearch
-              disabled={result}
+              disabled={result || !rootLip}
               placeholder="Chọn màu môi sau bong"
               optionFilterProp="children"
               onChange={onAfterSelect}
@@ -208,13 +235,13 @@ export const ColorScheme = () => {
                   .includes(input.toLowerCase())
               }
               style={{ marginBottom: 10 }}
-              options={afterLips}
+              options={editOptionValue(afterLips)}
             />
             <div
               className="sample"
               style={{
                 backgroundColor: afterLip,
-                display: afterLips ? "flex" : "none",
+                display: afterLip ? "flex" : "none",
               }}
             ></div>
           </Form.Item>
@@ -224,14 +251,17 @@ export const ColorScheme = () => {
             display: "flex",
             justifyContent: "center",
             width: "100%",
-            borderTop: "1px solid black",
+            borderTop: "1px solid rgb(232 232 232)",
           }}
         >
           <Form
-            style={{ width: "400px", padding: "0px 10px", marginTop: " 20px" }}
+            style={{ width: "400px", padding: "0px 20px", marginTop: " 20px" }}
             {...layout}
           >
-            <Form.Item label="Màu đi vào" style={{ marginBottom: 5 }}>
+            <Form.Item
+              label="Màu đi vào"
+              style={{ marginBottom: 5, fontWeight: 700 }}
+            >
               {result ? (
                 <div
                   className="sampleresult"
