@@ -160,7 +160,6 @@ export const ColorScheme = () => {
     form.resetFields();
   }
 
-  console.log(afterLip);
   return (
     <div className="layout">
       <div className="container">
