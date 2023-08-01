@@ -152,9 +152,6 @@ export const ColorScheme = () => {
           {...layout}
           ref={formRef}
           onReset={handleReset}
-          style={{
-            maxWidth: 1000,
-          }}
         >
           <Form.Item
             {...tailLayout}
@@ -222,8 +219,18 @@ export const ColorScheme = () => {
             ></div>
           </Form.Item>
         </Form>
-        <div>
-          <Form style={{ width: "400px" }} {...layout}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            width: "100%",
+            borderTop: "1px solid black",
+          }}
+        >
+          <Form
+            style={{ width: "400px", padding: "0px 10px", marginTop: " 20px" }}
+            {...layout}
+          >
             <Form.Item label="Màu đi vào" style={{ marginBottom: 5 }}>
               {result ? (
                 <div

@@ -62,18 +62,22 @@
 }
 .container {
   border: 1px solid black;
-  width: 500px;
+  width: 100%;
+  height: 100%;
   flex-direction: column;
   border-radius: 5px;
   display: flex;
   align-items: center;
 }
-
+body {
+  /* background-color: brown; */
+}
 .layout {
   border: 1px solid black;
-  width: 100vw;
+  width: 100%;
   height: 100vh;
   flex-direction: column;
+  overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -87,9 +91,12 @@
 }
 .result {
   width: 400px;
+
+  padding: 0px 10px;
   /* margin-bottom: 10px; */
 }
 .form {
   height: 60%;
   width: 400px;
+  padding: 0px 20px;
 }
