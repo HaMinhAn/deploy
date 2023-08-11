@@ -19,10 +19,25 @@ const tailLayout = {
     span: 16,
   },
 };
+
+const filterLabelRoot = (input, optionIn, options) => {
+  let optionOut = false;
+  for (const option of options) {
+    if (
+      option.label.toLowerCase().includes(input.toLowerCase()) &&
+      optionIn.value === option.value
+    ) {
+      // console.log(option, optionIn);
+      optionOut = true;
+      break;
+    }
+  }
+
+  return optionOut;
+};
 const editOptionValue = (options) => {
   const editedOptions = [];
   options.forEach((option, key) => {
-    console.log(option);
     const newOption = {
       key: key,
       value: option.value,
@@ -84,7 +99,6 @@ export const ColorScheme = () => {
   };
   useEffect(() => {
     if (!isLogin()) {
-      console.log(isLogin());
       history.push("/login");
     }
     if (!hasFetch) {
@@ -135,8 +149,6 @@ export const ColorScheme = () => {
                 });
               }
             }
-
-            // console.log(dataTemp);
           });
           setDatas(dataTemp);
           const lips = [];
@@ -144,9 +156,6 @@ export const ColorScheme = () => {
             lips.push(data.root);
           });
           setRootLips(lips);
-          // setDatas(jsonData);
-          console.log(jsonData[0]);
-          // Do something with the im ported data
         })
         .catch((error) => {
           console.error("Error importing Excel file:", error);
@@ -199,11 +208,9 @@ export const ColorScheme = () => {
               optionFilterProp="children"
               onChange={onRootSelect}
               onSearch={onSearch}
-              filterOption={(input, option) =>
-                (option?.label ?? "")
-                  .toLowerCase()
-                  .includes(input.toLowerCase())
-              }
+              filterOption={(input, option) => {
+                return filterLabelRoot(input, option, rootLips);
+              }}
               style={{ marginBottom: 10 }}
               disabled={result}
               options={editOptionValue(rootLips)}
@@ -228,11 +235,9 @@ export const ColorScheme = () => {
               optionFilterProp="children"
               onChange={onAfterSelect}
               onSearch={onSearch}
-              filterOption={(input, option) =>
-                (option?.label ?? "")
-                  .toLowerCase()
-                  .includes(input.toLowerCase())
-              }
+              filterOption={(input, option) => {
+                return filterLabelRoot(input, option, afterLips);
+              }}
               style={{ marginBottom: 10 }}
               options={editOptionValue(afterLips)}
             />
