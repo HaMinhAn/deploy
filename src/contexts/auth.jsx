@@ -4,8 +4,10 @@ import { useHistory } from "react-router-dom";
 const Authcontext = createContext({});
 const AuthProvider = ({ children }) => {
   const isLogin = () => {
-    console.log(localStorage.getItem("token"));
-    return localStorage.getItem("token") !== null;
+    return (
+      localStorage.getItem("token") !== null &&
+      localStorage.getItem("token") === "YWRtaW4rY2hhbmdlYWRtaW4xMjM="
+    );
   };
   return (
     <Authcontext.Provider value={{ isLogin }}>

@@ -17,7 +17,7 @@ const LoginForm = () => {
     }
   }, []);
   const onFinish = (value) => {
-    if (value.username === "admin" && value.password === "admin") {
+    if (value.username === "admin" && value.password === "changeadmin123") {
       localStorage.setItem(
         "token",
         btoa(`${value.username}+${value.password}`)
