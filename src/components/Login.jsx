@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { Button, Form, Input } from "antd";
+import React, { useEffect, useState } from "react";
+import { Button, Form, Input, message } from "antd";
 import { useHistory } from "react-router-dom";
 import { useAuth } from "../contexts/auth";
 
@@ -9,23 +9,17 @@ const onFinishFailed = (errorInfo) => {
 
 const LoginForm = () => {
   const history = useHistory();
-  const { isLogin } = useAuth();
+  const { checkLogin, login } = useAuth();
   useEffect(() => {
-    if (isLogin()) {
-      console.log(isLogin());
-      history.push("/");
-    }
+    checkLogin().then((res) => {
+      if (res) {
+        history.push("/");
+      }
+    });
   }, []);
   const onFinish = (value) => {
-    if (value.username === "admin" && value.password === "changeadmin123") {
-      localStorage.setItem(
-        "token",
-        btoa(`${value.username}+${value.password}`)
-      );
-      history.push("/");
-    } else {
-      alert("Nhập sai thông tin");
-    }
+    const token = btoa(`${value.username}+${value.password}`);
+    login(token);
   };
   return (
     <div className="layout">

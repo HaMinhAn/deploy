@@ -1,16 +1,29 @@
-import React, { ReactNode, createContext, useContext } from "react";
-import { useHistory } from "react-router-dom";
+import { message } from "antd";
+import React, { createContext, useContext, useEffect, useState } from "react";
+import auth from "../services/auth";
 
 const Authcontext = createContext({});
 const AuthProvider = ({ children }) => {
-  const isLogin = () => {
-    return (
-      localStorage.getItem("token") !== null &&
-      localStorage.getItem("token") === "YWRtaW4rY2hhbmdlYWRtaW4xMjM="
-    );
+  const checkLogin = () => {
+    return new Promise((resolve, reject) => {
+      auth().then((res) => {
+        resolve(res.includes(localStorage.getItem("token")));
+      });
+    });
+  };
+
+  const login = (token) => {
+    auth().then((res) => {
+      if (res.includes(token)) {
+        localStorage.setItem("token", token);
+        window.location.href = "/";
+      } else {
+        message.error("nhập sai thông tin");
+      }
+    });
   };
   return (
-    <Authcontext.Provider value={{ isLogin }}>
+    <Authcontext.Provider value={{ checkLogin, login }}>
       <>{children}</>
     </Authcontext.Provider>
   );
