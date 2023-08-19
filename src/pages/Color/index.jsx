@@ -72,7 +72,7 @@ export const ColorScheme = () => {
   const [afterLip, setAfterLip] = useState();
   const [form] = Form.useForm();
   const formRef = React.useRef(null);
-  const { isLogin } = useAuth();
+  const { checkLogin } = useAuth();
   const fileUrl = "./mau.xlsx";
   const history = useHistory();
   let hasFetch = false;
@@ -98,9 +98,11 @@ export const ColorScheme = () => {
     console.log("search:", value, key);
   };
   useEffect(() => {
-    if (!isLogin()) {
-      history.push("/login");
-    }
+    checkLogin().then((res) => {
+      if (!res) {
+        history.push("/login");
+      }
+    });
     if (!hasFetch) {
       hasFetch = true;
       fetch(fileUrl)
@@ -181,22 +183,40 @@ export const ColorScheme = () => {
           ref={formRef}
           onReset={handleReset}
         >
-          <Form.Item
+          <div
             style={{
               display: "flex",
-              justifyContent: "center",
+              justifyContent: "space-between",
               marginTop: 10,
               width: "100%",
             }}
           >
-            <Button
-              style={{ backgroundColor: "#be3455", color: "white" }}
-              type="default"
-              htmlType="reset"
-            >
-              Refresh
-            </Button>
-          </Form.Item>
+            <Form.Item>
+              <Button
+                style={{
+                  backgroundColor: "green",
+                  color: "white",
+                }}
+                type="default"
+                htmlType="reset"
+              >
+                Refresh
+              </Button>
+            </Form.Item>
+            <Form.Item>
+              <Button
+                style={{ backgroundColor: "red", color: "white" }}
+                type="default"
+                htmlType="button"
+                onClick={() => {
+                  localStorage.clear();
+                  window.location.href = "/login";
+                }}
+              >
+                Log out
+              </Button>
+            </Form.Item>
+          </div>
           <Form.Item
             name="root"
             label="Màu môi gốc"
